@@ -1,6 +1,6 @@
 from pathlib import Path
 import pandas as pd
-from app.database import get_engine
+from app.data_access.database import get_engine
 
 def execute_sql_file(sql_file, database):
     sql_path = Path(sql_file)

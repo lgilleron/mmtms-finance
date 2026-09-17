@@ -1,8 +1,8 @@
 from pathlib import Path
 from datetime import datetime
 import pandas as pd
-from app.database import get_databases
-from app.sql_runner import execute_sql_file
+from app.data_access.database import get_databases
+from app.data_access.sql_runner import execute_sql_file
 
 BASE_DIR = Path(__file__).parent.parent
 SQL_FILE = BASE_DIR / "sql" / "controle_statpays.sql"
