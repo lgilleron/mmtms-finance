@@ -5,8 +5,9 @@ from app.database import get_databases
 from app.sql_runner import execute_sql_file
 
 BASE_DIR = Path(__file__).parent.parent
-SQL_FILE = BASE_DIR / "sql" / "finance_ventes_section.sql"
+SQL_FILE = BASE_DIR / "sql" / "ventes_section.sql"
 EXPORT_DIR = BASE_DIR / "exports"
+
 
 def control_ventes_section():
     results = []
@@ -16,12 +17,14 @@ def control_ventes_section():
             results.append(df)
     return pd.concat(results, ignore_index=True) if results else pd.DataFrame()
 
+
 def export_excel(df):
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = EXPORT_DIR / f"finance_ventes_section_{timestamp}.xlsx"
+    filename = EXPORT_DIR / f"ventes_section_{timestamp}.xlsx"
     df.to_excel(filename, index=False, sheet_name="Ventes")
     return filename
+
 
 def main():
     try:
@@ -36,6 +39,7 @@ def main():
         export_excel(df)
     except Exception as error:
         print(f"ERREUR : {error}")
+
 
 if __name__ == "__main__":
     main()
