@@ -32,12 +32,7 @@ def main():
     try:
         df = control_ventes_section()
         count = len(df)
-        if count == 0:
-            print("0 ligne ventes")
-        elif count == 1:
-            print("1 ligne ventes")
-        else:
-            print(f"{count} lignes ventes")
+        print(f"{count} lignes ventes")
         export_excel(df)
     except Exception as error:
         print(f"ERREUR : {error}")

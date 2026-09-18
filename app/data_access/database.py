@@ -8,8 +8,10 @@ from sqlalchemy import create_engine
 
 load_dotenv()
 
+
 def get_databases():
     return [db.strip() for db in os.getenv("PGDATABASES", "").split(",") if db.strip()]
+
 
 def get_connection(database):
     return psycopg.connect(
@@ -19,6 +21,7 @@ def get_connection(database):
         user=os.getenv("PGUSER"),
         password=os.getenv("PGPASSWORD")
     )
+
 
 def get_engine(database):
     return create_engine(
