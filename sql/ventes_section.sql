@@ -1,1 +1,0 @@
-select * from bi.finance_ventes_section order by section;
