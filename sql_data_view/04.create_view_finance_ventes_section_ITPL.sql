@@ -21,7 +21,7 @@ FROM (SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
         INNER JOIN fadetail d ON d.numfact = f.numfact
         INNER JOIN libfact l ON l.codefact = d.codefact
       WHERE f.etat IS NOT NULL
-      AND   f.periodecpt = '202608'
+      AND   f.periodecpt >= '202601'
       GROUP BY f.pkfacture,
                f.numfact,
                p.bureau,
@@ -37,7 +37,8 @@ FROM (SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
       FROM facture f
         INNER JOIN pays p ON p.code = f.code
       WHERE f.etat IS NOT NULL
-      AND   f.periodecpt = '202608'
+      AND   l.codefact <> '999'
+      AND   f.periodecpt >= '202601'
       GROUP BY f.pkfacture,
                f.numfact,
                p.bureau) R1

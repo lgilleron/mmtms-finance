@@ -11,7 +11,7 @@ SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
        SUM(f.chiffre) AS ventes
 FROM facture f
 WHERE f.etat IS NOT NULL
-AND   f.periodecpt = '202608'
+AND   f.periodecpt >= '202601'
 GROUP BY societe,
          section,
          periodecpt;

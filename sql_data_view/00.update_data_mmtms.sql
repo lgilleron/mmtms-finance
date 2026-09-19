@@ -21,3 +21,18 @@ UPDATE facture
 WHERE COALESCE(periodestat,'') <> substr(datefact,1,6)
 AND   datefact>='20260101'
 AND   etat is not null;
+
+-- Initialisation PERIODECPT (Après changement)
+UPDATE facture
+   SET periodecpt = SUBSTR(datecr,1,6)
+WHERE datecr >= '20260828'
+AND   etat IS NOT NULL
+AND   COALESCE(periodecpt,'') <> SUBSTR(datecr,1,6);
+
+-- Initialisation PERIODECPT (Avant changement)
+UPDATE facture
+   SET periodecpt = SUBSTR(datefact,1,6)
+WHERE datecr < '20260828'
+AND   datefact >= '20260101'
+AND   etat IS NOT NULL
+AND   periodecpt IS NULL;

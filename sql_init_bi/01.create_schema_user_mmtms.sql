@@ -3,7 +3,7 @@ CREATE ROLE mmtmsbi WITH LOGIN PASSWORD 'mot_de_passe';
 
 -- A reproduire sur chaque base avec le user : mmtms / mmtmsact / mmtmsitp / mmtmsirf
 
--- 1. Création du schéma 'data' si nécessaire
+-- 1. Création du schéma 'bi' si nécessaire
 CREATE SCHEMA IF NOT EXISTS bi
     AUTHORIZATION mmtms;
 

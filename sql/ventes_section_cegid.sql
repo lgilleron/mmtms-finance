@@ -3,7 +3,7 @@ SELECT y_section AS section,
        SUM(y_credit - y_debit) AS ventes
 FROM analytiq
 WHERE y_general LIKE '7%'
-AND   y_periode = '202608'
+AND   y_periode >= '202601'
 AND   y_journal = 'VEN'
 GROUP BY y_section,
          y_periode
