@@ -16,3 +16,11 @@ GRANT SELECT ON ALL TABLES IN SCHEMA bi TO mmtmsbi;
 -- Attribution automatique des accès aux FUTURES vues du schéma 'bi'
 ALTER DEFAULT PRIVILEGES IN SCHEMA bi 
 GRANT SELECT ON TABLES TO mmtmsbi;
+
+-- Accès en exécution à toutes les fonctions existantes du schéma 'bi'
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA bi TO mmtmsbi;
+
+-- Attribution automatique des accès aux FUTURES fonctions du schéma 'bi'
+ALTER DEFAULT PRIVILEGES FOR ROLE mmtms
+IN SCHEMA bi
+GRANT EXECUTE ON FUNCTIONS TO mmtmsbi;

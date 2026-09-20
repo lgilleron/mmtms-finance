@@ -14,13 +14,15 @@ FROM (SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
              l.section,
              f.periodecpt,
              f.numfact,
-             SUM((CASE WHEN d.codefact < '100' THEN 0 ELSE (CASE WHEN f.foua = 1 THEN d.montant ELSE- d.montant END) END)) AS chiffre,
+             SUM((CASE WHEN f.foua = 1 THEN d.montant ELSE- d.montant END)) AS chiffre,
              0 AS debours
       FROM facture f
         INNER JOIN pays p ON p.code = f.code
         INNER JOIN fadetail d ON d.numfact = f.numfact
         INNER JOIN libfact l ON l.codefact = d.codefact
       WHERE f.etat IS NOT NULL
+      AND   l.codefact >= '100'
+      AND   l.codefact <> '999'
       AND   f.periodecpt >= '202601'
       GROUP BY f.pkfacture,
                f.numfact,
@@ -37,7 +39,6 @@ FROM (SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
       FROM facture f
         INNER JOIN pays p ON p.code = f.code
       WHERE f.etat IS NOT NULL
-      AND   l.codefact <> '999'
       AND   f.periodecpt >= '202601'
       GROUP BY f.pkfacture,
                f.numfact,
