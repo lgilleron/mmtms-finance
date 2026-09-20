@@ -3,13 +3,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from app.data_access.database import get_ms_databases
-from app.data_access.sql_runner import execute_ms_sql_file
-from app.ventes_section_mmtms import control_ventes_section as get_ventes_mmtms
+from app.data_access.database import get_databases, get_ms_databases
+from app.data_access.sql_runner import execute_ms_sql_file, execute_sql_file
 
 
 BASE_DIR = Path(__file__).parent.parent
 CEGID_SQL_FILE = BASE_DIR / "sql" / "ventes_section_cegid.sql"
+MMTMS_SQL_FILE = BASE_DIR / "sql" / "ventes_section_mmtms.sql"
 EXPORT_DIR = BASE_DIR / "exports"
 
 # Les codes société ne sont pas retournés par la requête Cegid : ils sont
@@ -36,6 +36,21 @@ def _verifier_colonnes(df: pd.DataFrame, colonnes: list[str], source: str) -> No
         raise ValueError(
             f"Colonnes manquantes dans les données {source} : {', '.join(sorted(manquantes))}"
         )
+
+
+def get_ventes_mmtms() -> pd.DataFrame:
+    """Extrait les ventes MMTMS de toutes les bases PostgreSQL configurées."""
+    resultats = []
+    for database in get_databases():
+        df = execute_sql_file(MMTMS_SQL_FILE, database)
+        if not df.empty:
+            resultats.append(df)
+
+    return (
+        pd.concat(resultats, ignore_index=True)
+        if resultats
+        else pd.DataFrame(columns=[*COLONNES_CLES, *COLONNES_VENTES])
+    )
 
 
 def get_ventes_cegid() -> pd.DataFrame:
@@ -101,7 +116,7 @@ def rapprocher_ventes(mmtms: pd.DataFrame, cegid: pd.DataFrame) -> pd.DataFrame:
 
 def export_excel(rapprochement: pd.DataFrame) -> Path:
     EXPORT_DIR.mkdir(parents=True, exist_ok=True)
-    filename = EXPORT_DIR / f"{datetime.now():%Y%m%d_%H%M%S}_ventes_section_rapprochement.xlsx"
+    filename = EXPORT_DIR / f"{datetime.now():%Y%m%d_%H%M%S}_controle_ventes_compta.xlsx"
     ecarts = rapprochement[rapprochement["statut"] != "Conforme"]
     with pd.ExcelWriter(filename, engine="openpyxl") as writer:
         rapprochement.to_excel(writer, index=False, sheet_name="Rapprochement")
