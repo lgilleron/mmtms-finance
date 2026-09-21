@@ -22,7 +22,9 @@ SYNTHESE_QUERY = text("""
     SELECT societe,
            :periode AS periode,
            section,
-           SUM(ventes) AS ventes_fae
+           SUM(ventes) AS ventes_fae,
+           COALESCE(SUM(ventes) FILTER (WHERE type_fae = 'FAE+'), 0) AS "ventes_fae+",
+           COALESCE(SUM(ventes) FILTER (WHERE type_fae = 'FAE-'), 0) AS "ventes_fae-"
     FROM bi.finance_details_fae(:periode)
     GROUP BY societe, section
     ORDER BY societe, section
@@ -86,7 +88,16 @@ def collecter_ventes_fae(periode: str) -> tuple[pd.DataFrame, dict[str, pd.DataF
     synthese_complete = (
         pd.concat(syntheses, ignore_index=True)
         if syntheses
-        else pd.DataFrame(columns=["societe", "periode", "section", "ventes_fae"])
+        else pd.DataFrame(
+            columns=[
+                "societe",
+                "periode",
+                "section",
+                "ventes_fae",
+                "ventes_fae+",
+                "ventes_fae-",
+            ]
+        )
     )
     return synthese_complete, details_par_societe
 

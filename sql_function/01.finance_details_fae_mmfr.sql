@@ -23,8 +23,8 @@ SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
        SUBSTR(f.abrege,4,8) AS nomabrege,
        f.periodestat,
        COALESCE(f.periodecpt,SUBSTR(f.datecpt,1,6)) AS periodecpt,
-       'FAE_PLUS' AS type_fae,
-       (CASE WHEN f.foua = 1 THEN f.chiffre -(f.debgro + f.debdos) ELSE f.chiffre + f.debgro + f.debdos END) AS ventes
+       'FAE+' AS type_fae,
+       (CASE WHEN SUBSTR(f.abrege,1,3) = 'BEL' THEN f.chiffre ELSE (CASE WHEN f.foua = 1 THEN f.chiffre -(f.debgro + f.debdos) ELSE f.chiffre + f.debgro + f.debdos END) END) AS ventes
 FROM facture f
 WHERE f.etat IS NOT NULL
 AND   f.periodestat = p_periode
@@ -37,8 +37,8 @@ SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
        SUBSTR(f.abrege,4,8) AS nomabrege,
        f.periodestat,
        COALESCE(f.periodecpt,SUBSTR(f.datecpt,1,6)) AS periodecpt,
-       'FAE_MOINS' AS type_fae,
-       -(CASE WHEN f.foua = 1 THEN f.chiffre -(f.debgro + f.debdos) ELSE f.chiffre + f.debgro + f.debdos END) AS ventes
+       'FAE-' AS type_fae,
+       -(CASE WHEN SUBSTR(f.abrege,1,3) = 'BEL' THEN f.chiffre ELSE (CASE WHEN f.foua = 1 THEN f.chiffre -(f.debgro + f.debdos) ELSE f.chiffre + f.debgro + f.debdos END) END) AS ventes
 FROM facture f
 WHERE f.etat IS NOT NULL
 AND   f.periodecpt = p_periode

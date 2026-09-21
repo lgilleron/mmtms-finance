@@ -32,7 +32,7 @@ FROM ((SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
               SUBSTR(f.abrege,4,8) AS nomabrege,
               f.periodestat,
               COALESCE(f.periodecpt,SUBSTR(f.datecpt,1,6)) AS periodecpt,
-              'FAE_PLUS' AS type_fae,
+              'FAE+' AS type_fae,
               SUM((CASE WHEN f.foua = 1 THEN d.montant ELSE- d.montant END)) AS chiffre,
               0 AS debours
        FROM facture f
@@ -57,7 +57,7 @@ FROM ((SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
               SUBSTR(f.abrege,4,8) AS nomabrege,
               f.periodestat,
               COALESCE(f.periodecpt,SUBSTR(f.datecpt,1,6)) AS periodecpt,
-              'FAE_PLUS' AS type_fae,
+              'FAE+' AS type_fae,
               0 AS chiffre,
               SUM((CASE WHEN f.foua = 1 THEN f.debgro + f.debdos ELSE- f.debgro - f.debdos END)) AS debours
        FROM facture f
@@ -77,7 +77,7 @@ FROM ((SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
               SUBSTR(f.abrege,4,8) AS nomabrege,
               f.periodestat,
               COALESCE(f.periodecpt,SUBSTR(f.datecpt,1,6)) AS periodecpt,
-              'FAE_MOINS' AS type_fae,
+              'FAE-' AS type_fae,
               -SUM((CASE WHEN f.foua = 1 THEN d.montant ELSE- d.montant END)) AS chiffre,
               0 AS debours
        FROM facture f
@@ -102,7 +102,7 @@ FROM ((SELECT societeagence(SUBSTR(f.abrege,1,3)) AS societe,
               SUBSTR(f.abrege,4,8) AS nomabrege,
               f.periodestat,
               COALESCE(f.periodecpt,SUBSTR(f.datecpt,1,6)) AS periodecpt,
-              'FAE_MOINS' AS type_fae,
+              'FAE-' AS type_fae,
               0 AS chiffre,
               -SUM((CASE WHEN f.foua = 1 THEN f.debgro + f.debdos ELSE- f.debgro - f.debdos END)) AS debours
        FROM facture f
